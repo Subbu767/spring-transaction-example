@@ -1,5 +1,11 @@
 package com.javatechie.tx.service;
 
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.javatechie.tx.dto.FlightBookingAcknowledgement;
 import com.javatechie.tx.dto.FlightBookingRequest;
 import com.javatechie.tx.entity.PassengerInfo;
@@ -7,13 +13,6 @@ import com.javatechie.tx.entity.PaymentInfo;
 import com.javatechie.tx.repository.PassengerInfoRepository;
 import com.javatechie.tx.repository.PaymentInfoRepository;
 import com.javatechie.tx.utils.PaymentUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 @Service
 public class FlightBookingService {
@@ -33,7 +32,7 @@ public class FlightBookingService {
 
         PaymentUtils.validateCreditLimit(paymentInfo.getAccountNo(), passengerInfo.getFare());
 
-        paymentInfo.setPassengerId(passengerInfo.getPId());
+        paymentInfo.setPassengerId(passengerInfo.getpId());
         paymentInfo.setAmount(passengerInfo.getFare());
         paymentInfoRepository.save(paymentInfo);
         return new FlightBookingAcknowledgement("SUCCESS", passengerInfo.getFare(), UUID.randomUUID().toString().split("-")[0], passengerInfo);
